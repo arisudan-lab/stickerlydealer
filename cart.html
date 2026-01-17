@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Order</title>
+</head>
+
+<body>
+    <h2>Order Details</h2>
+    <ul id="list"></ul>
+    <p id="total"></p>
+
+    <script>
+        const params = new URLSearchParams(location.search);
+        const cart = JSON.parse(atob(params.get("c")));
+        let sum = 0;
+        cart.forEach(i => {
+            sum += i.qty * 10;
+            list.innerHTML += `<li>${i.name} x${i.qty} = ₹${i.qty * 10}</li>`;
+        });
+        total.innerText = "Total: ₹" + sum;
+    </script>
+</body>
+
+</html>
