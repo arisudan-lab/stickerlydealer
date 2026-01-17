@@ -10,45 +10,45 @@
     * {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      box-sizing: border-box
     }
 
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       background: #f8f9fa;
-      color: #333;
+      color: #333
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 2rem;
+      padding: 1rem 2rem;
       background: #fff;
       border-bottom: 1px solid #e9ecef;
       position: sticky;
-      top: 0;
+      top: 0
     }
 
     #cart-btn {
       background: #111;
       color: #fff;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: .6rem 1.2rem;
       border-radius: 8px;
-      cursor: pointer;
+      cursor: pointer
     }
 
     main {
       max-width: 1200px;
       margin: auto;
-      padding: 2rem;
+      padding: 2rem
     }
 
     .sticker-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
+      gap: 1.5rem
     }
 
     .sticker-card {
@@ -56,28 +56,18 @@
       border-radius: 12px;
       padding: 1rem;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+      cursor: pointer
     }
 
     .sticker-card img {
       width: 100%;
       height: 150px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 8px
     }
 
-    .sticker-card button {
-      width: 100%;
-      margin-top: .6rem;
-      background: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: .5rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* Modal */
+    /* MODALS */
     .modal {
       position: fixed;
       inset: 0;
@@ -85,48 +75,56 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 10
     }
 
     .hidden {
-      display: none;
+      display: none
     }
 
     .modal-content {
       background: #fff;
-      padding: 1.5rem;
-      width: 90%;
-      max-width: 400px;
+      padding: 1.2rem;
       border-radius: 12px;
+      width: 90%;
+      max-width: 420px
     }
 
-    .modal-content ul {
-      list-style: none;
-      margin: 1rem 0;
-    }
-
-    .modal-content li {
-      display: flex;
-      justify-content: space-between;
-      padding: .4rem 0;
-      border-bottom: 1px solid #eee;
+    .modal-content img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: .8rem
     }
 
     .modal-actions {
       display: flex;
-      gap: .7rem;
+      gap: .6rem;
+      margin-top: .8rem
     }
 
     .modal-actions button {
       flex: 1;
       padding: .6rem;
-      border-radius: 8px;
       border: none;
-      cursor: pointer;
+      border-radius: 8px;
+      cursor: pointer
     }
 
-    #whatsapp-btn {
-      background: #25D366;
-      color: #fff;
+    .green {
+      background: #4CAF50;
+      color: #fff
+    }
+
+    .gray {
+      background: #e9ecef
+    }
+
+    input {
+      width: 100%;
+      padding: .6rem;
+      margin: .4rem 0;
+      border-radius: 6px;
+      border: 1px solid #ccc
     }
   </style>
 </head>
@@ -134,112 +132,127 @@
 <body>
 
   <header>
-    <h1>🎨 Sticker Shop</h1>
+    <h2>🎨 Sticker Shop</h2>
     <button id="cart-btn">🛒 Cart (<span id="cart-count">0</span>)</button>
   </header>
 
   <main>
-    <div class="sticker-grid" id="sticker-grid"></div>
+    <div id="sticker-grid" class="sticker-grid"></div>
   </main>
 
+  <!-- PRODUCT MODAL -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+      <img id="p-img">
+      <h3 id="p-name"></h3>
+      <p id="p-desc"></p>
+      <p><b>₹<span id="p-price"></span></b></p>
+      <div class="modal-actions">
+        <button class="green" id="p-add">Add to Cart</button>
+        <button class="gray" onclick="closeProduct()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
   <div id="cart-modal" class="modal hidden">
     <div class="modal-content">
-      <h2>Your Cart</h2>
+      <h3>Your Cart</h3>
       <ul id="cart-items"></ul>
-      <p id="cart-total"></p>
+      <p><b id="cart-total"></b></p>
+
+      <input id="cust-name" placeholder="Your name">
+      <input id="cust-phone" placeholder="Phone number">
 
       <div class="modal-actions">
-        <button id="whatsapp-btn">📱 WhatsApp</button>
-        <button id="close-modal">Close</button>
+        <button class="green" id="share-btn">Share Cart</button>
+        <button class="gray" onclick="closeCart()">Close</button>
       </div>
     </div>
   </div>
 
   <script>
-    // DATA
+    // PRODUCTS
     const stickers = [
-      { id: 1, name: "Happy Cat", price: 2.5 },
-      { id: 2, name: "Cool Dog", price: 2.5 },
-      { id: 3, name: "Pizza Slice", price: 2 },
-      { id: 4, name: "Unicorn", price: 3.5 },
-      { id: 5, name: "Rocket", price: 3 },
-      { id: 6, name: "Coffee", price: 2.25 },
-      { id: 7, name: "Avocado", price: 2.5 },
-      { id: 8, name: "Lightning", price: 2.25 },
+      { id: 1, name: "Happy Cat", price: 99, img: "https://placehold.co/400?text=Cat", desc: "Waterproof vinyl sticker" },
+      { id: 2, name: "Cool Dog", price: 99, img: "https://placehold.co/400?text=Dog", desc: "Matte finish sticker" },
+      { id: 3, name: "Rocket", price: 149, img: "https://placehold.co/400?text=Rocket", desc: "Premium space sticker" },
     ];
 
     let cart = [];
+    let selected = null;
 
     // DOM
     const grid = document.getElementById("sticker-grid");
-    const cartBtn = document.getElementById("cart-btn");
-    const cartModal = document.getElementById("cart-modal");
-    const cartItems = document.getElementById("cart-items");
-    const cartTotal = document.getElementById("cart-total");
     const cartCount = document.getElementById("cart-count");
 
-    // RENDER STICKERS
-    function renderStickers() {
+    // RENDER
+    function render() {
       grid.innerHTML = "";
       stickers.forEach(s => {
         grid.innerHTML += `
-      <div class="sticker-card">
-        <img src="https://placehold.co/200x150?text=${encodeURIComponent(s.name)}">
-        <h3>${s.name}</h3>
-        <p>$${s.price}</p>
-        <button onclick="addToCart(${s.id})">Add</button>
-      </div>
-    `;
+      <div class="sticker-card" onclick="openProduct(${s.id})">
+        <img src="${s.img}">
+        <h4>${s.name}</h4>
+        <p>₹${s.price}</p>
+      </div>`;
       });
     }
+    render();
 
-    // ADD CART
-    function addToCart(id) {
-      let item = cart.find(i => i.id === id);
-      if (item) item.qty++;
-      else cart.push({ ...stickers.find(s => s.id === id), qty: 1 });
-      updateCount();
+    // PRODUCT MODAL
+    function openProduct(id) {
+      selected = stickers.find(s => s.id === id);
+      document.getElementById("p-img").src = selected.img;
+      document.getElementById("p-name").innerText = selected.name;
+      document.getElementById("p-desc").innerText = selected.desc;
+      document.getElementById("p-price").innerText = selected.price;
+      document.getElementById("product-modal").classList.remove("hidden");
     }
-
-    function updateCount() {
-      cartCount.textContent = cart.reduce((a, b) => a + b.qty, 0);
+    function closeProduct() {
+      document.getElementById("product-modal").classList.add("hidden");
     }
+    document.getElementById("p-add").onclick = () => {
+      let i = cart.find(c => c.id === selected.id);
+      i ? i.qty++ : cart.push({ ...selected, qty: 1 });
+      cartCount.innerText = cart.reduce((a, b) => a + b.qty, 0);
+      closeProduct();
+    };
 
-    // CART MODAL
-    cartBtn.onclick = () => {
+    // CART
+    document.getElementById("cart-btn").onclick = () => {
       renderCart();
-      cartModal.classList.remove("hidden");
+      document.getElementById("cart-modal").classList.remove("hidden");
     };
-
-    document.getElementById("close-modal").onclick = () => {
-      cartModal.classList.add("hidden");
-    };
-
+    function closeCart() {
+      document.getElementById("cart-modal").classList.add("hidden");
+    }
     function renderCart() {
-      cartItems.innerHTML = "";
-      let total = 0;
+      let ul = document.getElementById("cart-items");
+      let total = 0; ul.innerHTML = "";
       cart.forEach(i => {
         total += i.qty * i.price;
-        cartItems.innerHTML += `
-      <li><span>${i.name} x${i.qty}</span><span>$${(i.qty * i.price).toFixed(2)}</span></li>
-    `;
+        ul.innerHTML += `<li>${i.name} x${i.qty} — ₹${i.qty * i.price}</li>`;
       });
-      cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+      document.getElementById("cart-total").innerText = "Total: ₹" + total;
     }
 
-    // WHATSAPP SHARE
-    document.getElementById("whatsapp-btn").onclick = () => {
+    // SHARE CART (LINK ONLY)
+    document.getElementById("share-btn").onclick = async () => {
       if (!cart.length) return alert("Cart empty");
-      let msg = "Sticker Order%0A%0A";
-      cart.forEach(i => {
-        msg += `${i.name} x${i.qty} = $${(i.qty * i.price).toFixed(2)}%0A`;
-      });
-      window.open(`https://wa.me/?text=${msg}`);
+
+      const name = document.getElementById("cust-name").value;
+      const phone = document.getElementById("cust-phone").value;
+      if (!name || !phone) return alert("Enter name & phone");
+
+      // 🔗 BACKEND PLACEHOLDER
+      // const order_id = await saveToSupabase({name, phone, cart});
+      const order_id = crypto.randomUUID();
+
+      const link = `https://yourshop.vercel.app/cart.html?id=${order_id}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(link)}`);
     };
-
-    renderStickers();
   </script>
-
 </body>
 
 </html>
