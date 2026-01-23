@@ -1,4 +1,3 @@
-const PRICE = 10;
 let products = [];
 let cart = [];
 
@@ -33,7 +32,7 @@ function renderProducts() {
     <div class="sticker-card">
         <img src="${p.image}" onclick="openPreview(${p.id})" style="cursor: pointer;">
         <h3>${p.name}</h3>
-        <p class="price">₹${PRICE}</p>
+        <p class="price">₹${p.price}</p> 
         <button onclick="addToCart(${p.id})">Add to Cart</button>
     </div>
     `;
@@ -88,14 +87,15 @@ function renderCart() {
     }
 
     cart.forEach(i => {
-        total += i.qty * PRICE;
+        const itemTotal = i.qty * i.price; // Use item's own price
+        total += itemTotal;
         cartItems.innerHTML += `
     <li>
         <div class="cart-item-info">
             <span>${i.name} <small style="color:#666">x${i.qty}</small></span>
         </div>
         <div class="cart-item-actions">
-            <strong>₹${i.qty * PRICE}</strong>
+            <strong>₹${itemTotal}</strong>
             <button class="remove-btn" onclick="removeFromCart(${i.id})" title="Remove Item">×</button>
         </div>
     </li>
@@ -163,7 +163,7 @@ document.getElementById("whatsapp-btn").onclick = async () => {
             try {
                 await navigator.share({
                     title: 'New Order',
-                    text: `📦 New Order from ${name}\nTotal: ₹${cart.reduce((a, b) => a + (b.qty * PRICE), 0)}\n`,
+                    text: `📦 New Order from ${name}\nTotal: ₹${cart.reduce((a, b) => a + (b.qty * b.price), 0)}\n`,
                     url: link
                 });
             } catch (err) {
@@ -183,7 +183,7 @@ function openPreview(id) {
     // Fill data
     previewImg.src = product.image;
     previewTitle.textContent = product.name;
-    previewPrice.textContent = PRICE;
+    previewPrice.textContent = product.price;
 
     // Set the "Add to Cart" button action inside the modal
     previewAddBtn.onclick = () => {

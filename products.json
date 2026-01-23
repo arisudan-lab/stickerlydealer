@@ -2,196 +2,235 @@
     {
         "id": 1,
         "name": "Manchester City",
-        "image": "assets/1.png"
+        "image": "assets/1.png",
+        "price": 11
     },
     {
         "id": 2,
-        "name": "Argentina National Team",
-        "image": "assets/2.png"
+        "name": "Argentina National ",
+        "image": "assets/2.png",
+        "price": 10
     },
     {
         "id": 3,
-        "name": "Portugal National Team",
-        "image": "assets/3.png"
+        "name": "Portugal National ",
+        "image": "assets/3.png",
+        "price": 10
     },
     {
         "id": 4,
         "name": "Tottenham Hotspur",
-        "image": "assets/4.png"
+        "image": "assets/4.png",
+        "price": 10
     },
     {
         "id": 5,
         "name": "Bayern Munich",
-        "image": "assets/5.png"
+        "image": "assets/5.png",
+        "price": 10
     },
     {
         "id": 6,
-        "name": "Brazil National Team",
-        "image": "assets/6.png"
+        "name": "Brazil National ",
+        "image": "assets/6.png",
+        "price": 10
     },
     {
         "id": 7,
         "name": "Bayer Leverkusen",
-        "image": "assets/7.png"
+        "image": "assets/7.png",
+        "price": 10
     },
     {
         "id": 8,
         "name": "Champions League",
-        "image": "assets/8.png"
+        "image": "assets/8.png",
+        "price": 10
     },
     {
         "id": 9,
-        "name": "Colombia National Team",
-        "image": "assets/9.png"
+        "name": "Colombia National",
+        "image": "assets/9.png",
+        "price": 10
     },
     {
         "id": 10,
         "name": "Paris Saint-Germain",
-        "image": "assets/10.png"
+        "image": "assets/10.png",
+        "price": 10
     },
     {
         "id": 11,
         "name": "Real Madrid",
-        "image": "assets/11.png"
+        "image": "assets/11.png",
+        "price": 10
     },
     {
         "id": 12,
         "name": "Sporting CP",
-        "image": "assets/12.png"
+        "image": "assets/12.png",
+        "price": 10
     },
     {
         "id": 13,
         "name": "Manchester United",
-        "image": "assets/13.png"
+        "image": "assets/13.png",
+        "price": 10
     },
     {
         "id": 14,
         "name": "Chelsea",
-        "image": "assets/14.png"
+        "image": "assets/14.png",
+        "price": 10
     },
     {
         "id": 15,
         "name": "Arsenal",
-        "image": "assets/15.png"
+        "image": "assets/15.png",
+        "price": 10
     },
     {
         "id": 16,
         "name": "Liverpool",
-        "image": "assets/16.png"
+        "image": "assets/16.png",
+        "price": 10
     },
     {
         "id": 17,
         "name": "Juventus",
-        "image": "assets/17.png"
+        "image": "assets/17.png",
+        "price": 10
     },
     {
         "id": 18,
         "name": "FC Barcelona",
-        "image": "assets/18.png"
+        "image": "assets/18.png",
+        "price": 10
     },
     {
         "id": 19,
         "name": "Scratch",
-        "image": "assets/19.png"
+        "image": "assets/19.png",
+        "price": 10
     },
     {
         "id": 20,
         "name": "Kaggle",
-        "image": "assets/20.png"
+        "image": "assets/20.png",
+        "price": 10
     },
     {
         "id": 21,
         "name": "Keras",
-        "image": "assets/21.png"
+        "image": "assets/21.png",
+        "price": 10
     },
     {
         "id": 22,
         "name": "Git",
-        "image": "assets/22.png"
+        "image": "assets/22.png",
+        "price": 10
     },
     {
         "id": 23,
         "name": "Git Branch",
-        "image": "assets/23.png"
+        "image": "assets/23.png",
+        "price": 10
     },
     {
         "id": 24,
         "name": "GitHub",
-        "image": "assets/24.png"
+        "image": "assets/24.png",
+        "price": 10
     },
     {
         "id": 25,
         "name": "Node.js",
-        "image": "assets/25.png"
+        "image": "assets/25.png",
+        "price": 10
     },
     {
         "id": 26,
         "name": "Docker",
-        "image": "assets/26.png"
+        "image": "assets/26.png",
+        "price": 10
     },
     {
         "id": 27,
         "name": "GitLab",
-        "image": "assets/27.png"
+        "image": "assets/27.png",
+        "price": 10
     },
     {
         "id": 28,
         "name": "GitHub Octocat",
-        "image": "assets/28.png"
+        "image": "assets/28.png",
+        "price": 10
     },
     {
         "id": 29,
         "name": "Oops!",
-        "image": "assets/29.png"
+        "image": "assets/29.png",
+        "price": 10
     },
     {
         "id": 30,
         "name": "Django",
-        "image": "assets/30.png"
+        "image": "assets/30.png",
+        "price": 10
     },
     {
         "id": 31,
         "name": "MySQL",
-        "image": "assets/31.png"
+        "image": "assets/31.png",
+        "price": 10
     },
     {
         "id": 32,
         "name": "C++",
-        "image": "assets/32.png"
+        "image": "assets/32.png",
+        "price": 10
     },
     {
         "id": 33,
         "name": "PHP",
-        "image": "assets/33.png"
+        "image": "assets/33.png",
+        "price": 10
     },
     {
         "id": 34,
         "name": "C#",
-        "image": "assets/34.png"
+        "image": "assets/34.png",
+        "price": 10
     },
     {
         "id": 35,
         "name": "C",
-        "image": "assets/35.png"
+        "image": "assets/35.png",
+        "price": 10
     },
     {
         "id": 36,
-        "name": "Sometimes I Might React",
-        "image": "assets/36.png"
+        "name": "Sometimes I Might",
+        "image": "assets/36.png",
+        "price": 10
     },
     {
         "id": 37,
         "name": "Git Committed",
-        "image": "assets/37.png"
+        "image": "assets/37.png",
+        "price": 10
     },
     {
         "id": 38,
         "name": "How to fly",
-        "image": "assets/38.png"
+        "image": "assets/38.png",
+        "price": 10
     },
     {
         "id": 39,
         "name": "Ship Happens",
-        "image": "assets/39.png"
+        "image": "assets/39.png",
+        "price": 10
     }
 ]
