@@ -1,89 +1,37 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📦 New Order</title>
-
+    <title>📦 Order Receipt</title>
     <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-            background: #f9f9f9;
-        }
-
-        h2 {
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .customer-info {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-
-        .customer-info p {
-            margin: 5px 0;
-            font-size: 1.1em;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-
-        li {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        li:last-child {
-            border-bottom: none;
-        }
-
-        #total {
-            font-size: 1.5em;
-            font-weight: bold;
-            text-align: right;
-            margin-top: 20px;
-            color: #2c3e50;
-        }
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; color: #333; }
+        h2 { border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        .customer-info { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; }
+        .customer-info p { margin: 8px 0; font-size: 1.05em; line-height: 1.4; }
+        .customer-info strong { color: #555; }
+        ul { list-style: none; padding: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; }
+        li { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        li:last-child { border-bottom: none; }
+        #total { font-size: 1.5em; font-weight: bold; text-align: right; margin-top: 20px; color: #2c3e50; }
+        .coupon-tag { color: #27ae60; font-weight: bold; font-size: 0.9em; }
 
         @media print {
-            #print-btn {
-                display: none;
-            }
-
-            body {
-                background: #fff;
-                padding: 0;
-            }
-
-            .customer-info,
-            ul {
-                border: none;
-            }
+            #print-btn { display: none; }
+            body { background: #fff; padding: 0; }
+            .customer-info, ul { border: 1px solid #eee; }
         }
     </style>
 </head>
-
 <body>
     <h2>🛒 Order Receipt</h2>
 
-    <div class="customer-info">
+    <div class="customer-info" id="info-panel">
         <p><strong>👤 Name:</strong> <span id="cust-name"></span></p>
         <p><strong>📞 Phone:</strong> <span id="cust-phone"></span></p>
+        <p id="p-email" style="display:none;"><strong>📧 Email:</strong> <span id="cust-email"></span></p>
+        <p id="p-address" style="display:none;"><strong>🏠 Address:</strong> <span id="cust-address"></span></p>
+        <p id="p-coupon" style="display:none;"><strong>🎟️ Coupon:</strong> <span id="cust-coupon" class="coupon-tag"></span></p>
     </div>
 
     <h3>Items:</h3>
@@ -91,50 +39,57 @@
     <p id="total"></p>
 
     <div style="text-align: center; margin-top: 30px;">
-        <button id="print-btn" onclick="window.print()" style="
-        padding: 12px 25px;
-        background: #2c3e50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1em;
-        font-weight: bold;">
+        <button id="print-btn" onclick="window.print()" style="padding: 12px 25px; background: #2c3e50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: bold;">
             Print Receipt / Save as PDF
         </button>
     </div>
 
     <script>
-        // 1. Get parameters from URL
         const params = new URLSearchParams(location.search);
 
-        // 2. Display Name and Phone
+        // Helper to display optional fields
+        function setField(id, param, wrapperId) {
+            const val = params.get(param);
+            if (val && val.trim() !== "") {
+                document.getElementById(id).innerText = val;
+                if (wrapperId) document.getElementById(wrapperId).style.display = "block";
+            }
+        }
+
+        // 1. Display Customer Details
         document.getElementById("cust-name").innerText = params.get("name") || "Guest";
         document.getElementById("cust-phone").innerText = params.get("phone") || "Not Provided";
+        
+        // Handle new fields
+        setField("cust-email", "email", "p-email");
+        setField("cust-address", "address", "p-address");
+        setField("cust-coupon", "coupon", "p-coupon");
 
-        // 3. Decode and Display Cart
+        // 2. Decode and Display Cart
         try {
-            const cart = JSON.parse(atob(params.get("c")));
+            const cartData = params.get("c");
+            if (!cartData) throw new Error("No cart data");
+            
+            const cart = JSON.parse(atob(cartData));
             const list = document.getElementById("list");
-            const total = document.getElementById("total");
+            const totalDisplay = document.getElementById("total");
 
             let sum = 0;
             cart.forEach(i => {
-                // FIX: Use i.price (from the encoded object) instead of hard-coded 10
                 const itemTotal = i.qty * i.price;
                 sum += itemTotal;
                 list.innerHTML += `
-            <li>
-                <span>${i.name} <small>(x${i.qty})</small></span>
-                <span>₹${itemTotal}</span>
-            </li>`;
+                    <li>
+                        <span>${i.name} <small>(x${i.qty})</small></span>
+                        <span>₹${itemTotal}</span>
+                    </li>`;
             });
-            total.innerText = "Total Payable: ₹" + sum;
+            totalDisplay.innerText = "Total Payable: ₹" + sum;
 
         } catch (e) {
-            document.body.innerHTML = "<h3>⚠️ Invalid or Empty Order Link</h3>";
+            console.error(e);
+            document.body.innerHTML = "<div style='text-align:center; padding:50px;'><h3>⚠️ Invalid or Empty Order Link</h3><p>Please check the link and try again.</p></div>";
         }
     </script>
 </body>
-
 </html>

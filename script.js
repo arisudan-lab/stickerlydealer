@@ -69,13 +69,11 @@ function removeFromCart(id) {
 function renderCart() {
     cartItems.innerHTML = "";
     let total = 0;
-
     if (cart.length === 0) {
         cartItems.innerHTML = "<p style='text-align:center; color:#888;'>Cart is empty</p>";
         cartTotal.textContent = "Total: ₹0";
         return;
     }
-
     cart.forEach(i => {
         const itemTotal = i.qty * i.price;
         total += itemTotal;
@@ -96,7 +94,7 @@ function renderCart() {
 // 4. NAVIGATION & SLIDER LOGIC
 cartBtn.onclick = () => {
     renderCart();
-    slider.classList.remove("slide-active"); // Reset to first panel
+    slider.classList.remove("slide-active");
     cartModal.classList.remove("hidden");
 };
 
@@ -111,28 +109,84 @@ backBtn.onclick = () => {
 };
 
 // 5. RECEIPT & SHARING LOGIC
-function updateReceiptLink() {
-    const name = document.getElementById("customer-name").value || "Customer";
-    const phone = document.getElementById("customer-phone").value || "";
-    const cartData = btoa(JSON.stringify(cart));
-    
-    // Construct link
-    const link = `${window.location.origin}/cart.html?c=${cartData}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`;
-    receiptUrlInput.value = link;
+// ... [Previous code for Sections 1-4 remains the same] ...
+
+// --- SECTION 5: RECEIPT, VALIDATION & SHARING LOGIC ---
+
+// 1. Select the box we want to lock/unlock
+const receiptBox = document.querySelector(".receipt-share-box");
+
+// 2. Lock it by default (Run this immediately)
+function lockReceiptBox() {
+    receiptBox.style.opacity = "0.5";              // Dim it to look disabled
+    receiptBox.style.pointerEvents = "none";       // Make it unclickable (cursor none)
+    receiptBox.style.cursor = "not-allowed";
+}
+lockReceiptBox(); // Call it on load
+
+// 3. Helper: Unlock it
+function unlockReceiptBox() {
+    receiptBox.style.opacity = "1";
+    receiptBox.style.pointerEvents = "auto";
+    receiptBox.style.cursor = "default";
 }
 
-document.getElementById("copy-link-btn").onclick = async () => {
-    try {
-        await navigator.clipboard.writeText(receiptUrlInput.value);
-        alert("Link copied to clipboard!");
-    } catch (err) {
-        alert("Failed to copy.");
+function updateReceiptLink() {
+    // Get values safely
+    const name = document.getElementById("customer-name")?.value.trim() || "";
+    const phone = document.getElementById("customer-phone")?.value.trim() || "";
+    const email = document.getElementById("customer-email")?.value.trim() || "";
+    const address = document.getElementById("customer-address")?.value.trim() || "";
+    const coupon = document.getElementById("customer-coupon")?.value.trim() || "";
+
+    const cartData = btoa(JSON.stringify(cart));
+
+    // Construct link
+    const link = `${window.location.origin}/cart.html?c=${cartData}` +
+        `&name=${encodeURIComponent(name || "Customer")}` +
+        `&phone=${encodeURIComponent(phone || "Not Provided")}` +
+        `&email=${encodeURIComponent(email)}` +
+        `&address=${encodeURIComponent(address)}` +
+        `&coupon=${encodeURIComponent(coupon)}`;
+
+    if (receiptUrlInput) {
+        receiptUrlInput.value = link;
     }
+    return link;
+}
+
+
+document.getElementById("place-order-btn").onclick = () => {
+    if (cart.length === 0) return alert("Cart is empty!");
+
+    // --- VALIDATION: Make fields important ---
+    const name = document.getElementById("customer-name").value.trim();
+    const phone = document.getElementById("customer-phone").value.trim();
+    const email = document.getElementById("customer-email").value.trim();
+    const address = document.getElementById("customer-address").value.trim();
+    // Coupon is usually optional, so we skip it in the "Required" check.
+    // If you strictly want Coupon mandatory too, add: || !document.getElementById("customer-coupon").value.trim()
+
+    if (!name || !phone || !email || !address) {
+        alert("⚠️ Please fill in all required fields (Name, Phone, Email, Address) to place the order.");
+        return; // Stop here if validation fails
+    }
+
+    // --- IF VALID: Generate Link & Unlock ---
+    const freshLink = updateReceiptLink();
+    unlockReceiptBox(); // <--- THIS ENABLES THE COPY/SHARE BUTTONS
+
+    alert("🚀 Order Placed Successfully! \nYou can now copy or share the receipt link below.");
+
+    console.log("Admin Payload:", {
+        customer: { name, phone, email, address, coupon: document.getElementById("customer-coupon").value },
+        items: cart,
+        receiptUrl: freshLink
+    });
 };
 
 document.getElementById("whatsapp-btn").onclick = async () => {
-    updateReceiptLink();
-    const link = receiptUrlInput.value;
+    const link = updateReceiptLink();
     const name = document.getElementById("customer-name").value || "Customer";
 
     if (navigator.share) {
@@ -146,6 +200,23 @@ document.getElementById("whatsapp-btn").onclick = async () => {
     } else {
         window.open(`https://wa.me/?text=${encodeURIComponent(link)}`);
     }
+};
+
+document.getElementById("copy-link-btn").onclick = async () => {
+    const link = updateReceiptLink();
+    try {
+        await navigator.clipboard.writeText(link);
+        alert("📋 Link copied to clipboard!");
+    } catch (err) {
+        alert("Failed to copy link.");
+    }
+};
+
+nextBtn.onclick = () => {
+    if (cart.length === 0) return alert("Your cart is empty!");
+    slider.classList.add("slide-active");
+    lockReceiptBox(); // Reset to locked state every time they enter the info screen
+    updateReceiptLink();
 };
 
 // 6. MODAL CLOSING LOGIC
@@ -177,12 +248,4 @@ document.getElementById("clear-cart-btn").onclick = () => {
         updateCount();
         renderCart();
     }
-};
-
-document.getElementById("place-order-btn").onclick = () => {
-    alert("Order data logged to console!");
-    console.log("Admin Payload:", {
-        customer: document.getElementById("customer-name").value,
-        cart: cart
-    });
 };
