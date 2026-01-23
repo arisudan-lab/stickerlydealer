@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📦 New Order</title>
+
     <style>
         body {
             font-family: sans-serif;
@@ -58,6 +59,22 @@
             margin-top: 20px;
             color: #2c3e50;
         }
+
+        @media print {
+            #print-btn {
+                display: none;
+            }
+
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .customer-info,
+            ul {
+                border: none;
+            }
+        }
     </style>
 </head>
 
@@ -73,12 +90,25 @@
     <ul id="list"></ul>
     <p id="total"></p>
 
+    <div style="text-align: center; margin-top: 30px;">
+        <button id="print-btn" onclick="window.print()" style="
+        padding: 12px 25px;
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;">
+            Print Receipt / Save as PDF
+        </button>
+    </div>
+
     <script>
         // 1. Get parameters from URL
         const params = new URLSearchParams(location.search);
 
         // 2. Display Name and Phone
-        // We use "No Name" as a fallback if the data is missing
         document.getElementById("cust-name").innerText = params.get("name") || "Guest";
         document.getElementById("cust-phone").innerText = params.get("phone") || "Not Provided";
 
@@ -90,13 +120,14 @@
 
             let sum = 0;
             cart.forEach(i => {
-                const itemTotal = i.qty * 10;
+                // FIX: Use i.price (from the encoded object) instead of hard-coded 10
+                const itemTotal = i.qty * i.price;
                 sum += itemTotal;
                 list.innerHTML += `
-                <li>
-                    <span>${i.name} <small>(x${i.qty})</small></span>
-                    <span>₹${itemTotal}</span>
-                </li>`;
+            <li>
+                <span>${i.name} <small>(x${i.qty})</small></span>
+                <span>₹${itemTotal}</span>
+            </li>`;
             });
             total.innerText = "Total Payable: ₹" + sum;
 
