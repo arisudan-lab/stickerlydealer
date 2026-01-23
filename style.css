@@ -158,6 +158,7 @@ main {
     border-radius: 12px;
     width: 90%;
     max-width: 400px;
+    max-height: 90vh;
 }
 
 .modal-content h2 {
