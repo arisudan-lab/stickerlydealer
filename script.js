@@ -155,6 +155,11 @@ function updateReceiptLink() {
     return link;
 }
 
+function clearCartAfterOrder() {
+    cart = [];
+    updateCount();
+    renderCart();
+}
 
 // --- 4. EVENT LISTENERS ---
 
@@ -214,12 +219,14 @@ document.getElementById("place-order-btn").onclick = () => {
     .then(response => {
         alert("🚀 Order Placed Successfully! Your receipt is ready.");
         unlockReceiptBox(); // Enable Copy/Share buttons
+        clearCartAfterOrder();
         console.log("Order sent to database");
     })
     .catch(error => {
         alert("⚠️ Network Error: Order placed locally, but failed to save to database.");
         console.error('Error!', error.message);
         unlockReceiptBox(); // Still unlock so they can share manually
+        clearCartAfterOrder();
     })
     .finally(() => {
         btn.innerText = originalText;
