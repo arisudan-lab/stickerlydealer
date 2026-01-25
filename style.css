@@ -2,7 +2,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.35) transparent;
 }
+
+
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -183,10 +187,12 @@ main {
 }
 
 .modal-actions {
+    margin-top: auto;        /* 🔑 PUSH TO BOTTOM */
     display: flex;
-    flex-direction: column;   /* 🔑 vertical stacking */
+    flex-direction: column;
     gap: 0.5rem;
 }
+
 
 .cart-buttons {
     display: flex;
@@ -333,10 +339,40 @@ main {
 }
 
 .cart-panel {
-    width: 50%; /* Each panel takes half of the 200% width */
+    width: 50%;
     padding: 1.5rem;
     flex-shrink: 0;
     max-height: 90vh;
+
+    display: flex;           /* 🔑 */
+    flex-direction: column;  /* 🔑 */
+}
+
+#cart-items {
+    flex: 1;
+    overflow-y: auto;
+
+    padding-right: 12px;   /* space for scrollbar */
+    margin-right: -12px;   /* pulls scrollbar to edge */
+
+    scrollbar-gutter: stable;
+}
+
+#cart-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+#cart-items::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#cart-items::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+#cart-items::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
 }
 
 /* Slide state */
@@ -381,5 +417,44 @@ main {
     padding: 5px !important;
     background: #333;
     color: white;
+}
+
+@media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    * {
+        scrollbar-width: none;
+    }
+}
+
+
+/* Hide scrollbar when idle (WebKit only) */
+body:not(:hover)::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+
+/* ===== GLOBAL SCROLLBAR (DESKTOP) ===== */
+
+
+/* Chrome / Edge / Brave */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.35);
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0,0,0,0.55);
 }
 
