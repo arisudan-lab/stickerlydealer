@@ -12,6 +12,8 @@ const cartCount = document.getElementById("cart-count");
 const cartModal = document.getElementById("cart-modal");
 const cartItems = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
+const shareBtn = document.getElementById("whatsapp-btn");
+
 
 // Modal/Slider Elements
 const slider = document.getElementById("cart-slider");
@@ -35,7 +37,14 @@ function lockReceiptBox() {
         receiptBox.style.pointerEvents = "none";
         receiptBox.style.cursor = "not-allowed";
     }
+
+    if (shareBtn) {
+        shareBtn.disabled = true;
+        shareBtn.style.opacity = "0.5";
+        shareBtn.style.cursor = "not-allowed";
+    }
 }
+
 
 function unlockReceiptBox() {
     if (receiptBox) {
@@ -43,7 +52,14 @@ function unlockReceiptBox() {
         receiptBox.style.pointerEvents = "auto";
         receiptBox.style.cursor = "default";
     }
+
+    if (shareBtn) {
+        shareBtn.disabled = false;
+        shareBtn.style.opacity = "1";
+        shareBtn.style.cursor = "pointer";
+    }
 }
+
 
 lockReceiptBox(); // Lock on load
 

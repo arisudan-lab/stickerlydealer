@@ -177,6 +177,7 @@ main {
 .modal-content li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: .5rem 0;
     border-bottom: 1px solid #e9ecef;
 }
@@ -272,14 +273,7 @@ main {
 
 /* NEW STYLES FOR CART UPDATES */
 
-.modal-content li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* Center items vertically */
-    padding: .75rem 0;
-    border-bottom: 1px solid #e9ecef;
-}
+
 
 /* Group the name and quantity */
 .cart-item-info {
